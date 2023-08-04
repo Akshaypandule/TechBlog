@@ -58,8 +58,9 @@
       <li class="nav-item">
         <a class="nav-link" href="#"> <span class="fa fa-phone-square"></span> Contact</a>
       </li>
-       
-     
+       <li class="nav-item">
+        <a class="nav-link" href="#" data-toggle="modal" data-target="#add-post-modal"> <span class="fa fa-plus"></span> DoPost</a>
+      </li>
     </ul>
     <ul class="navbar-nav mr-right">
     <li class="nav-item">
@@ -68,17 +69,13 @@
     	<li class="nav-item">
         <a class="nav-link" href="LogoutServlet"> <span class="fa fa-user-plus"></span> Logout</a>
       </li>
-    	
-    
     </ul>
   </div>
 </nav>
-
 <!--  Nav bar end -->
 
 		<!-- Profile Modal -->
 		<!-- Button trigger modal -->
-
 <!-- Modal -->
 <div class="modal fade" id="profile-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -127,7 +124,7 @@
 					<div id="profile-edit" style="display: none;">
 					
 					<h4 class="mt-2">Please Edit Carefully</h4>
-					<form action="EditServlet" method="post">
+					<form action="EditServlet" method="post" enctype="multipart/form-data">
 							<table class="table">
 							<tr>
 								<td>ID:</td>
@@ -135,11 +132,11 @@
 							</tr>
 							<tr>
 							    <td>Email :</td>
-							    <td><input type="email" class="form-control" name="useremail" value="<%= user.getEmail()%>">  </td>
+							    <td><input type="email" class="form-control" name="email" value="<%= user.getEmail()%>">  </td>
 							</tr>
 							<tr>
 								<td>Name:</td>
-								<td><input type="text" class="form-control" name="username" value="<%= user.getName()%>">  </td>
+								<td><input type="text" class="form-control" name="name" value="<%= user.getName()%>">  </td>
 							</tr>
 							<tr>
 								<td>Password:</td>
@@ -163,16 +160,10 @@
 								</td>
 							</tr>
 							</table>
-							
 							<div class="container">
 								<button type="submit" class="btn btn-outline-primary">Save</button>
 							</div>
-					
-					
 					</form>
-					
-					
-					
 					</div>
       </div>
        
@@ -186,8 +177,61 @@
 </div>
 		
 		<!-- End of Profile Model -->
+		
+		
+		<!-- Add post Model -->
+		<!-- Button trigger modal -->
 
 
+<!-- Modal -->
+<div class="modal fade" id="add-post-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Provide post details</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      	<form action="AddPostServlet" method="post">
+      			<div class="form-group">
+      				<select class="form-control">
+      					<option selected disabled>Select Category</option>
+      					<option>cat1</option>
+      					<option>cat2</option>
+      					<option>cat3</option>
+      					
+      				
+      				</select>
+      			
+      			</div>
+      	
+      			<div class="form-group">
+      				<input type="text" placeholder="Enter Post Title" class="form-control">
+      			</div>
+      			<div class="form-group">
+      				<textarea class="form-control" style="height: 200px;" placeholder="Enter your Content" ></textarea>
+      			</div>
+      			<div class="form-group">
+      				<textarea class="form-control" style="height: 200px;" placeholder="Enter your Code (if any)" ></textarea>
+      			</div>
+      			<div class="form-group">
+      			 <label>Select your pic</label>
+      			 <input type="file">
+      			</div>
+      	</form>
+      
+       
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+		<!-- End post Model -->
 <!-- Java Script -->
 				<script src="https://code.jquery.com/jquery-3.7.0.min.js" 
 				integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="

@@ -7,18 +7,13 @@ import java.sql.ResultSet;
 import com.tech.blog.entities.User;
 
 public class Userdao {
-	
-	
 	private Connection conn;
-	
-	public Userdao (Connection conn) {
-		
+	public Userdao (Connection conn) {	
 		this.conn=conn;
 		
 	}
 	public boolean saveUser(User user) {
 		boolean f=false;
-		
 		try {
 			
 			String query="insert into user(name,email,password,gender,about) value(?,?,?,?,?)";
@@ -31,16 +26,13 @@ public class Userdao {
 			
 			pts.executeUpdate();
 			
-			f=true;
-			
-			
+			f=true;		
 		}
 		catch(Exception e) {
 			e.printStackTrace();
 			
 		}
 		return f;
-		
 	}
 	
 	// get user email and password from database
@@ -77,5 +69,28 @@ public class Userdao {
 		
 		return user;
 	}
-
+	
+	public boolean updateUser(User user) {
+		boolean f=false;
+		try {
+			
+			String query="update user set name=? ,email=? ,password=? ,gender=? ,about=? ,profile=? where id=?";
+			PreparedStatement p=conn.prepareStatement(query);
+			p.setString(1, user.getName());
+			p.setString(2, user.getEmail());
+			p.setString(3, user.getPassword());
+			p.setString(4, user.getGender());
+			p.setString(5, user.getAbout());
+			p.setString(6, user.getProfile());
+			p.setInt(7,user.getId());
+			
+			p.executeUpdate();
+			f=true;
+		}
+		catch(Exception e) {
+			
+			e.printStackTrace();
+		}
+		return f;
+	}
 }
