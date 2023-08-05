@@ -51,4 +51,13 @@ xmlns="http://xmlns.jcp.org/xml/ns/javaee"
     <url-pattern>/EditServlet</url-pattern>
   </servlet-mapping>
   
+  <servlet>
+  	<servlet-name>addpostservlet</servlet-name>
+  	<servlet-class>com.tech.blog.servlet.AddPostServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>addpostservlet</servlet-name>
+  	<url-pattern>/AddPostServlet</url-pattern>
+  </servlet-mapping>
+  
   </web-app>

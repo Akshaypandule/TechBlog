@@ -1,3 +1,7 @@
+<%@page import="com.tech.blog.entities.Category"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="com.tech.blog.helper.ConnectionProvider"%>
+<%@page import="com.tech.blog.dao.Postdao"%>
 <%@page import="com.tech.blog.entities.User"%>
 <%@page errorPage="error.jsp" %>
 <%  
@@ -177,12 +181,8 @@
 </div>
 		
 		<!-- End of Profile Model -->
-		
-		
 		<!-- Add post Model -->
 		<!-- Button trigger modal -->
-
-
 <!-- Modal -->
 <div class="modal fade" id="add-post-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -194,40 +194,46 @@
         </button>
       </div>
       <div class="modal-body">
-      	<form action="AddPostServlet" method="post">
+      	<form id="add-post-form"action="AddPostServlet" method="post">
       			<div class="form-group">
-      				<select class="form-control">
+      				<select class="form-control" name="cid">
       					<option selected disabled>Select Category</option>
-      					<option>cat1</option>
-      					<option>cat2</option>
-      					<option>cat3</option>
-      					
-      				
+      					<%
+      							Postdao postdao=new Postdao(ConnectionProvider.getConnection());
+      							ArrayList <Category> list= postdao.getAllCategories();
+      							
+      							for(Category c:list)
+      							{
+      							%>
+      							<option value="<%= c.getId()%>"><%=c.getName() %></option>
+      							<% 
+      							}
+      							%>
       				</select>
       			
       			</div>
       	
       			<div class="form-group">
-      				<input type="text" placeholder="Enter Post Title" class="form-control">
+      				<input type="text" placeholder="Enter Post Title" class="form-control" name="pTitle">
       			</div>
       			<div class="form-group">
-      				<textarea class="form-control" style="height: 200px;" placeholder="Enter your Content" ></textarea>
+      				<textarea class="form-control" style="height: 200px;" placeholder="Enter your Content" name="pContent" ></textarea>
       			</div>
       			<div class="form-group">
-      				<textarea class="form-control" style="height: 200px;" placeholder="Enter your Code (if any)" ></textarea>
+      				<textarea class="form-control" style="height: 200px;" placeholder="Enter your Code (if any)" name=pCode></textarea>
       			</div>
       			<div class="form-group">
       			 <label>Select your pic</label>
-      			 <input type="file">
+      			 <input type="file" name="pic">
+      			</div>
+      			<div class="container text-center">
+      				<button type="submit" class="btn-btn-outline-primary">Post</button>
       			</div>
       	</form>
       
        
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
+ 
     </div>
   </div>
 </div>
@@ -242,6 +248,8 @@
 				<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" 
 				integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" 
 				crossorigin="anonymous"></script>
+				<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+				<script type="text/javascript" src="js/myjs.js"></script>
 				
 				<script>
 						$(document).ready(function(){
@@ -277,10 +285,46 @@
 							
 						});
 				</script>
-		
-			
-			
-			
-			
+				
+				<!--  now add post js -->
+			<script>
+						  $(document).ready(function () {
+						    $("#add-post-form").on("submit", function (event) {
+						      // this function gets called when the form is submitted.......
+						      event.preventDefault();
+						      console.log("you have clicked on submit...");
+						      let form = new FormData(this);
+						
+						      // now requesting the server
+						
+						      $.ajax({
+						        url: "AddPostServlet", // Missing comma here
+						        type: "POST", // Missing comma here
+						        data: form,
+						        success: function (data, textStatus, jqXHR) {
+						          // success
+						          console.log(data);
+						          
+						         if(data.trim()=='done')
+						        	 {
+						        	   swal("Good job!","saved successfully","success")
+						        	 }
+						         else
+						        	 {
+						        	 
+						        	  swal("error","something want wrong try","error")
+						        	 }
+						         
+						        },
+						        error: function (jqXHR, textStatus, errorThrown) {
+						          // error
+						          swal("error","something want wrong try","error")
+						        },
+						        processData: false,
+						        contentType: false,
+						      });
+						    });
+						  });
+              </script>			
 </body>
 </html>
