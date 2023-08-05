@@ -1,3 +1,4 @@
+<%@page import="java.sql.Connection"%>
 <%@page import="com.tech.blog.entities.Category"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="com.tech.blog.helper.ConnectionProvider"%>
@@ -77,6 +78,68 @@
   </div>
 </nav>
 <!--  Nav bar end -->
+
+<!-- Main body of the Page -->
+			<main>
+				<div class="container">
+					<div class="row mt-4">
+						<!-- First column -->
+						<div class="col-md-4">
+							<!-- categories -->
+							<div class="list-group">
+								  <a href="#" class="list-group-item list-group-item-action active">
+								    All Posts
+								  </a>
+								  <!-- categories call form database 
+								   	user postdao class object to get categories
+								   --> 
+								  <%
+								  		Postdao p=new Postdao(ConnectionProvider.getConnection());
+								  		ArrayList<Category> list1=p.getAllCategories();
+								  		
+								  		for(Category cc:list1){
+								  			
+								  			%>
+								  			<a href="#"  class="list-group-item list-group-item-action"><%=cc.getName()%></a>
+								  		<%	
+								  		}
+								  	%>
+							</div>
+						</div>
+						<!-- Secound column -->
+						<div class="col-md-8">
+							<!-- Post -->
+							<div class="container text-center" id="loader">
+								<i class="fa fa-refresh fa-3x fa-spin"></i>
+								<h4 class="mt-2">Loading...</h4>
+							</div>
+							<div class="container-fluid" id="post-container">
+							
+							</div>
+						
+						</div>
+					</div>
+				
+				</div>
+			
+			
+			
+			</main>
+
+
+
+<!-- End of Main body -->
+
+
+
+
+
+
+
+
+
+
+
 
 		<!-- Profile Modal -->
 		<!-- Button trigger modal -->
@@ -196,23 +259,22 @@
       <div class="modal-body">
       	<form id="add-post-form"action="AddPostServlet" method="post">
       			<div class="form-group">
-      				<select class="form-control" name="cid">
-      					<option selected disabled>Select Category</option>
-      					<%
-      							Postdao postdao=new Postdao(ConnectionProvider.getConnection());
-      							ArrayList <Category> list= postdao.getAllCategories();
-      							
-      							for(Category c:list)
-      							{
-      							%>
-      							<option value="<%= c.getId()%>"><%=c.getName() %></option>
-      							<% 
-      							}
-      							%>
-      				</select>
-      			
-      			</div>
-      	
+					    <select class="form-control" name="cid">
+					        <option selected disabled>Select Category</option>
+					        <%
+					            Postdao postdao = new Postdao(ConnectionProvider.getConnection());
+					            ArrayList<Category> list = postdao.getAllCategories();
+					            
+					            for (Category c : list)
+					            {
+					        %>
+					        <option value="<%= c.getId()%>"><%=c.getName() %></option>
+					        <%
+					            }
+					        %>
+					    </select>
+					</div>
+					      	
       			<div class="form-group">
       				<input type="text" placeholder="Enter Post Title" class="form-control" name="pTitle">
       			</div>
@@ -249,7 +311,7 @@
 				integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" 
 				crossorigin="anonymous"></script>
 				<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
-				<script type="text/javascript" src="js/myjs.js"></script>
+				
 				
 				<script>
 						$(document).ready(function(){
@@ -325,6 +387,28 @@
 						      });
 						    });
 						  });
-              </script>			
+              </script>	
+              <!-- Loading post  by using ajax -->
+              <script >
+              		function getPosts(catId){
+              			
+              		data:(cid:catId),
+              			
+              			
+              			$.ajax({
+              				url:"LoadPost.jsp",
+              				success:function(data,textStatus,jqXHR){
+              					
+              					console.log(data);
+              					$("#loader").hide();
+              					$("#post-container").html(data)
+              				}
+              			})	
+              		}
+              		$ (document).ready(function(){
+             			getPosts(0)
+              			
+              		})
+              </script>		
 </body>
 </html>
